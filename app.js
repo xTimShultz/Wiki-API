@@ -1,3 +1,4 @@
+// REST API for Wiki Articles
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -68,6 +69,47 @@ app.route("/articles/:articleTitle")
                 res.send("No articles matching that title found");
             };
         });
+    })
+
+    .put(function(req, res) {
+        Article.replaceOne(
+            {title: req.params.articleTitle},
+            req.body,
+            function(err){
+               if (err) {
+                   res.send(err);
+               } else {
+                   res.send("Successfully updated Article.")
+               }
+            }
+        );
+    })
+
+    .patch(function(req, res) {
+        Article.updateOne(
+            {title: req.params.articleTitle},
+            req.body,
+            function(err){
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send("Successfully patched Article.")
+                }
+            }
+        );        
+    })
+
+    .delete(function(req, res) {
+        Article.deleteOne(
+            {title: req.params.articleTitle},
+            function(err){
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send("Successfully deleted Article.")
+                }
+            }
+        )
     });
 
 app.listen(port,() => {
